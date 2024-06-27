@@ -4,6 +4,8 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var favicon = require("serve-favicon");
+var cors = require('cors');
+
 
 var indexRouter = require("./routes/index");
 var webpayPlusRouter = require("./routes/webpay_plus");
@@ -23,6 +25,15 @@ var app = express();
 if (app.settings.env == "development") {
   require("dotenv").config();
 }
+
+// Configuración de CORS
+var corsOptions = {
+  origin: 'http://localhost:8100/',  // Asegúrate de que este es el origen correcto para tu frontend
+  optionsSuccessStatus: 200 // Para compatibilidad con navegadores antiguos
+};
+app.use(cors()); // Permite todas las solicitudes CORS
+
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
