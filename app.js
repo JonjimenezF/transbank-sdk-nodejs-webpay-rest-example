@@ -27,14 +27,21 @@ if (app.settings.env == "development") {
 }
 
 // Configuración de CORS
+// Configuración de CORS para aceptar múltiples puertos
 var corsOptions = {
-  origin: 'http://localhost:8100/',  // Asegúrate de que este es el origen correcto para tu frontend
-  optionsSuccessStatus: 200 // Para compatibilidad con navegadores antiguos
+  origin: function (origin, callback) {
+    // Permite todos los puertos, ajusta esta lógica según tus necesidades
+    if (!origin || ['http://localhost:8100', 'http://localhost:3000'].includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],  // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization']  // Encabezados permitidos
 };
-app.use(cors()); // Permite todas las solicitudes CORS
 
-
-
+app.use(cors(corsOptions));
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
